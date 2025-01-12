@@ -1,0 +1,46 @@
+{
+    "name": "terraform-ansible-eks",
+    "version": "1.0.0",
+    "description": "Terraform and Ansible integration for AWS EKS",
+    "keywords": [
+        "terraform",
+        "ansible",
+        "eks",
+        "ecs",
+        "s3",
+        "lambdas",
+        "aws"
+    ],
+    "author": "Omar Miskinyar",
+    "license": "MIT",
+    "dependencies": {
+        "ansible": "^2.10.10"
+    },
+    "builders": [{
+        "type": "amazon-ebs",
+        "ssh_pty": true,
+        "access_key": "{{user `aws_access_key`}}",
+        "secret_key": "{{user `aws_secret_key`}}",
+        "region": "us-west-2",
+        "instance_type": "t2.medium",
+        "source_ami": "ami-28e07e50",
+        "ssh_username": "ec2-user",
+        "ami_name": "Terraform and Ansible EKS Cluster - v1.0.0"
+    }],
+    "provisioners": [{
+            "type": "ansible",
+            "playbook_file": "../ansible/playbooks/configure_web_server.yml"
+        },
+        {
+            "type": "local-exec",
+            "command": "echo 'Hello World'"
+        },
+        {
+            "type": "remote-exec",
+            "inline": [
+                "echo 'Hello World'",
+                "ansible-playbook -i 'localhost,' --private-key ${var.private_key_path} ../ansible/playbooks/configure_web_server.yml"
+            ]
+        }
+    ]
+}

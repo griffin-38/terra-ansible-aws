@@ -1,0 +1,12 @@
+#  Local .terraform directories
+**/.terraform/*
+ansible
+# .tfstate files
+*.tfstate
+*.tfstate.*
+
+# .tfvars files
+*.tfvars
+
+*.retry
+playbooks/*.swp
